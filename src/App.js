@@ -13,7 +13,7 @@ function App() {
 
   return (
     <CanvasContainer>
-      <Canvas>
+      <Canvas >
         <Suspense fallback = {null}> //loading fallback
           <Stars radius={100} depth={600} count={2000} factor={10} saturation={0} fade={true}/>
           <Earth></Earth>
