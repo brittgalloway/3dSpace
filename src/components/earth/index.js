@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useLoader, useFrame } from "@react-three/fiber";
-import { OrbitControls, Bounds, useBounds } from "@react-three/drei";
+import { OrbitControls, Bounds, useBounds, Text3D } from "@react-three/drei";
 import * as THREE from 'three';
 import EarthClouds from "../../assets/8k_earth_clouds.jpg";
 import EarthNormal from "../../assets/8k_earth_normal_map.jpg";
@@ -13,10 +13,10 @@ export function Earth() {
 
     const [colorMap, normalMap, specularMap, cloudsMap] = useLoader(TextureLoader, [EarthDayMap, EarthNormal, EarthSpecular, EarthClouds ]);
     
-    const earthRef = useRef();
-    const cloudRef = useRef();
     const sphereArgs = [1, 32, 32];
     const planetPostion = [0,0,0];
+    const earthRef = useRef();
+    const cloudRef = useRef();
 
     const mercuryRef = useRef();
     const venusRef = useRef();
@@ -31,36 +31,36 @@ export function Earth() {
         const elaspedTime = clock.getElapsedTime();
 
         earthRef.current.rotation.y = elaspedTime / 6;
-        earthRef.current.position.x = Math.cos(elaspedTime)*150;
-        earthRef.current.position.z = Math.sin(elaspedTime)*150;
+        earthRef.current.position.x = Math.cos(elaspedTime * (100/ 1000))*150;
+        earthRef.current.position.z = Math.sin(elaspedTime * (100/ 1000))*150;
 
         cloudRef.current.rotation.y = elaspedTime / 6;
-        cloudRef.current.position.x = Math.cos(elaspedTime)*150;
-        cloudRef.current.position.z = Math.sin(elaspedTime)*150;
+        cloudRef.current.position.x = Math.cos(elaspedTime * (100/ 1000))*150;
+        cloudRef.current.position.z = Math.sin(elaspedTime * (100/ 1000))*150;
 
-        mercuryRef.current.position.x = Math.cos(elaspedTime)*35; 
-        mercuryRef.current.position.z = Math.sin(elaspedTime)*35;
+        mercuryRef.current.position.x = Math.cos(elaspedTime * (760/ 1000))*35; 
+        mercuryRef.current.position.z = Math.sin(elaspedTime * (760/ 1000))*35;
 
-        venusRef.current.position.x = Math.cos(elaspedTime)*100; 
-        venusRef.current.position.z = Math.sin(elaspedTime)*100; 
+        venusRef.current.position.x = Math.cos(elaspedTime * (388/ 1000))*100; 
+        venusRef.current.position.z = Math.sin(elaspedTime * (388/ 1000))*100; 
 
-        marsRef.current.position.x = Math.cos(elaspedTime)*210;
-        marsRef.current.position.z = Math.sin(elaspedTime)*210;
+        marsRef.current.position.x = Math.cos(elaspedTime * (88/ 1000))*210;
+        marsRef.current.position.z = Math.sin(elaspedTime * (88/ 1000))*210;
         
-        jupiterRef.current.position.x = Math.cos(elaspedTime)*300;
-        jupiterRef.current.position.z = Math.sin(elaspedTime)*300;
+        jupiterRef.current.position.x = Math.cos(elaspedTime * (75/ 1000))*300;
+        jupiterRef.current.position.z = Math.sin(elaspedTime * (75/ 1000))*300;
         
-        saturnRef.current.position.x = Math.cos(elaspedTime)*450;
-        saturnRef.current.position.z = Math.sin(elaspedTime)*450;
+        saturnRef.current.position.x = Math.cos(elaspedTime * (51/ 1000))*450;
+        saturnRef.current.position.z = Math.sin(elaspedTime * (51/ 1000))*450;
         
-        uranusRef.current.position.x = Math.cos(elaspedTime)*600;
-        uranusRef.current.position.z = Math.sin(elaspedTime)*600;
+        uranusRef.current.position.x = Math.cos(elaspedTime * (23/ 1000))*600;
+        uranusRef.current.position.z = Math.sin(elaspedTime * (23/ 1000))*600;
         
-        neptuneRef.current.position.x = Math.cos(elaspedTime)*800;
-        neptuneRef.current.position.z = Math.sin(elaspedTime)*800;
+        neptuneRef.current.position.x = Math.cos(elaspedTime * (12/ 1000))*800;
+        neptuneRef.current.position.z = Math.sin(elaspedTime * (12/ 1000))*800;
         
-        plutoRef.current.position.x = Math.cos(elaspedTime)*1000;
-        plutoRef.current.position.z = Math.sin(elaspedTime)*1000;
+        plutoRef.current.position.x = Math.cos(elaspedTime * (2/ 1000))*1000;
+        plutoRef.current.position.z = Math.sin(elaspedTime * (2/ 1000))*1000;
         
     })
 
@@ -74,6 +74,7 @@ export function Earth() {
                     <pointLight color='#f6f3ea' intensity={1.2}/>
                     <sphereGeometry arg={[100, 60, 60]}/>
                     <meshStandardMaterial color='#f9d71c' emissive={0xf9d71c} emissiveIntensity={2} metalness={0.4} roughness={0.7}/>
+                
                 </mesh>
                 {/* END sun */}
                 {/* MERCURY */}
