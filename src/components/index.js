@@ -2,14 +2,15 @@ import React, { useRef, useState} from "react";
 import { useLoader, useFrame } from "@react-three/fiber";
 import { OrbitControls, Bounds, useBounds, Text, Billboard, Html } from "@react-three/drei";
 import * as THREE from 'three';
-import EarthClouds from "../../assets/8k_earth_clouds.jpg";
-import EarthNormal from "../../assets/8k_earth_normal_map.jpg";
-import EarthSpecular from "../../assets/8k_earth_specular_map.jpg";
-import EarthDayMap from "../../assets/8k_earth_daymap.jpg";
+import Planet from "./planet";
+import EarthClouds from "../assets/8k_earth_clouds.jpg";
+import EarthNormal from "../assets/8k_earth_normal_map.jpg";
+import EarthSpecular from "../assets/8k_earth_specular_map.jpg";
+import EarthDayMap from "../assets/8k_earth_daymap.jpg";
 import { TextureLoader } from "three";
 
 
-export function Earth() {
+const IndexPage = () => {
 
     const [colorMap, normalMap, specularMap, cloudsMap] = useLoader(TextureLoader, [EarthDayMap, EarthNormal, EarthSpecular, EarthClouds ]);
     const [hidden, set] = useState(true);
@@ -18,6 +19,7 @@ export function Earth() {
     const earthRef = useRef();
     const cloudRef = useRef();
 
+    const sunRef = useRef();
     const mercuryRef = useRef();
     const venusRef = useRef();
     const marsRef = useRef();
@@ -29,8 +31,8 @@ export function Earth() {
     const plutoRef = useRef();
 
     const handleText = () => {
-        set(hidden ? false : true);
-        return hidden;
+        // set(hidden ? false : true);
+      
     }
 
 // https://codesandbox.io/s/bounds-and-makedefault-rz2g0?file=/src/App.js
@@ -113,7 +115,7 @@ useFrame(({ clock }) => {
     plutoRef.current.position.z = Math.sin(elaspedTime * (2/ 1000))*1000;
     
 })
-    return <>
+    return (<>
         <ambientLight intensity={1}/>
         {/* <OrbitControls makeDefault minPolarAngle={0} maxPolarAngle={Math.PI / 1.75} /> */}
         <OrbitControls  makeDefault minPolarAngle={0} maxPolarAngle={Math.PI / 1.75}/>
@@ -121,11 +123,10 @@ useFrame(({ clock }) => {
         <Bounds fit observe margin={1.2}>
             <SelectToZoom>
                 {/* sun */}
-                <mesh name={'sun'} scale={[15,15,15]} onClick={() => { handleText() }}>
+                <mesh name={'sun'} ref={sunRef} scale={[15,15,15]} onClick={() => { set(hidden ? false : true); sunRef.current = hidden }}>
                     <pointLight color='#f6f3ea' intensity={1.2}/>
                     <sphereGeometry arg={[100, 60, 60]}/>
                     <meshStandardMaterial color='#f9d71c' emissive={0xf9d71c} emissiveIntensity={2} metalness={0.4} roughness={0.7}/>
-                
                 </mesh>
                 <Html
                     as='article'
@@ -147,10 +148,23 @@ useFrame(({ clock }) => {
             </SelectToZoom>
         </Bounds>
                 {/* MERCURY */}
-                <mesh name={'mercury'} ref={mercuryRef} scale={[0.3,0.3,0.3]} position={planetPostion} rotation={[0,0,30]} onClick={() => { handleText() }} >
-                    <sphereGeometry arg={sphereArgs}/>
-                    <meshStandardMaterial color='#999999' metalness={0.4} roughness={1}/>
-                </mesh>
+                <Planet
+                    name={'mercury'}
+                    ref={mercuryRef}
+                    scale={[0.3,0.3,0.3]}
+                    rotation={[0,0,30]}
+                    sphereGeometryArg={sphereArgs}
+                    meshColor={'#999999'}
+                    meshRoughness={1}
+                    wrapperClass={'mercuryFacts'}
+                    majorMoons={0}
+                    moons={0}
+                    realRotation={'59 days'}
+                    revolutions={'88 days'}
+                    fact={'Mercury has no atmosphere.'}
+                />
+                
+
                 {/* END MERCURY */}
                 {/* VENUS */}
                 <mesh name={'venus'} ref={venusRef} scale={[0.9,0.9,0.9]} position={planetPostion} onClick={() => { handleText() }}>
@@ -177,7 +191,7 @@ useFrame(({ clock }) => {
                 </mesh>
                 {/* END MARS */}
                 {/* JUPITER */}
-                <mesh name={'jupiterRef'} scale={[8,8,8]} position={planetPostion} ref={jupiterRef} onClick={() => { handleText() }}>
+                <mesh name={'jupiterRef'} scale={[8,8,8]} position={planetPostion} ref={jupiterRef} onClick={() => {set(hidden ? false : true)}}>
                     <sphereGeometry arg={sphereArgs}/>
                     <meshStandardMaterial color='#722e0a' metalness={0.6} roughness={0.7} />
                     
@@ -227,6 +241,7 @@ useFrame(({ clock }) => {
                 </mesh>
                 {/* END PLUTO */}
             
-    </>;
+    </>)
 }
 
+export default IndexPage;
