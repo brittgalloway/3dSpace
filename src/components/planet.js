@@ -1,25 +1,31 @@
-import * as React from "react";
-import { useLoader} from "@react-three/fiber";
+import React, { useRef, useState} from "react";
+import { useFrame} from "@react-three/fiber";
 import { Html } from "@react-three/drei";
-import * as THREE from 'three';
-import { TextureLoader } from "three";
 
-export default function Planet({name, ref, scale, rotation, pointColor, pointIntensity, sphereGeometryArg, meshColor, meshRoughness, meshMetalness, wrapperClass, majorMoons, moons, realRotation, revolutions, fact} ) {
+export default function Planet({name, scale, rotation, position1, position2, meshColor, meshRoughness, meshMetalness, wrapperClass, majorMoons, moons, realRotation, revolutions, fact} ) {
 
-    const [hidden, set] = React.useState(true);
-
-
+    const [hidden, set] = useState(true);
+    const planetRef = useRef();
+    
     const handleText = () => {
         set(hidden ? false : true);
       
     }
+    useFrame(({ clock }) => {
+        const elaspedTime = clock.getElapsedTime();
+    
+        planetRef.current.position.x = Math.cos(elaspedTime * (position1/ 1000))* position2; 
+        planetRef.current.position.z = Math.sin(elaspedTime * (position1/ 1000))* position2;
+        
+    })
+
     return <>
-        <mesh name={name} ref={ref} position={[0,0,0]} scale={scale} rotation={rotation} onClick={() => { set(hidden ? false : true); ref.current = hidden }}>
-            <pointLight color={pointColor} intensity={pointIntensity}/>
-            <sphereGeometry arg={sphereGeometryArg}/>
+        <mesh name={name} ref={planetRef} position={[0,0,0]} scale={scale} rotation={rotation} onClick={() => { handleText() }}>
+            <sphereGeometry arg={[1, 32, 32]}/>
             <meshStandardMaterial color={meshColor} metalness={meshMetalness} roughness={meshRoughness}/>
         
         </mesh>
+    
         <Html
             as='article'
             wrapperClass={wrapperClass}
